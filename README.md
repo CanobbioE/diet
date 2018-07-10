@@ -1,5 +1,5 @@
 # DIET
-D.I.E.T (Do I Eat That?) Is a Go app that helps you keeping an eye on your eating habits.
+D.I.E.T (Did I Eat That?) Is a Go app that helps you keeping an eye on your eating habits.
 To achive that it shows the percentage of a certain type of food you've eaten.
 
 ## DISCLAIMER
