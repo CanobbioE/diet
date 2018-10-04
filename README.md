@@ -15,3 +15,6 @@ DIET divides all the food into 7 groups:
 - Fruits and Vegetables (Vitamin A)
 - Fruits and Vegetables (Vitamin C)  
 It then shows the user the percentage of every group based on what the user has eaten recently.
+
+## Status
+As for now the app is not stable.
