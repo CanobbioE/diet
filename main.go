@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 
+	"github.com/CanobbioE/diet/nutrition"
 	"github.com/boltdb/bolt"
 )
 
@@ -34,6 +35,14 @@ func usage(appName, version string) {
 }
 
 func init() {
+	// Reads flags
+	flag.BoolVar(&showHelp, "help", false, "display help")
+	flag.StringVar(&mealToAdd, "a", mealToAdd, "comma separeted string of ingridients eaten")
+	flag.StringVar(&mealToAdd, "add", mealToAdd, "comma separeted string of ingridients eaten")
+	flag.StringVar(&newFoodItem, "n", newFoodItem, "name of the new food item and the groups it is part of (eg \"foodName 1234567\")")
+	flag.StringVar(&newFoodItem, "new", newFoodItem, "name of the new food item and the groups it is part of (eg \"foodName 1234567\")")
+	flag.BoolVar(&showHelp, "h", false, "dispaly help")
+
 	// Creates db if it doesn't exist
 	db, err := bolt.Open("diet.db", 0600, nil)
 	if err != nil {
@@ -69,15 +78,6 @@ func init() {
 		return nil
 	})
 
-	// Reads flags
-	flag.BoolVar(&showHelp, "help", false, "display help")
-	flag.StringVar(&mealToAdd, "a", mealToAdd, "comma separeted string of ingridients eaten")
-	flag.StringVar(&mealToAdd, "add", mealToAdd, "comma separeted string of ingridients eaten")
-	flag.StringVar(&newFoodItem, "n", newFoodItem, "name of the new food item and the groups it is part of (eg \"foodName 1234567\")")
-	flag.StringVar(&newFoodItem, "new", newFoodItem, "name of the new food item and the groups it is part of (eg \"foodName 1234567\")")
-	flag.BoolVar(&showHelp, "h", false, "dispaly help")
-	flag.BoolVar(&debug, "d", false, "enables debug mode")
-	flag.BoolVar(&debug, "debug", false, "enables debug mode")
 }
 
 func main() {
@@ -86,12 +86,11 @@ func main() {
 	if showHelp == true {
 		usage(appName, version)
 	}
-	if mealToAdd != "" {
-		// TODO: use the controller to add the meal to the model
-		fmt.Printf("Specified %s as meal to add\n", mealToAdd)
-	}
-	if newFoodItem != "" {
-		// TODO: use the controller to add the item after parsing the flag
-		fmt.Printf("Specified %s as a new food item\n", newFoodItem)
-	}
+
+	args := make(map[string]interface{})
+
+	args["mealToAdd"] = mealToAdd
+	args["newFoodItem"] = newFoodItem
+
+	nutrition.Main(args)
 }
