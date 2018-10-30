@@ -67,7 +67,7 @@ func init() {
 		if dietBucket.Stats().KeyN == 0 {
 			for i := 1; i < 8; i++ {
 				var buffer bytes.Buffer
-				buffer.WriteString("Group " + strconv.Itoa(i))
+				buffer.WriteString("G" + strconv.Itoa(i))
 				err := dietBucket.Put(buffer.Bytes(), []byte("0"))
 				if err != nil {
 					return fmt.Errorf("put value: %s", err)
