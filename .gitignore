@@ -13,3 +13,6 @@
 
 # Binaries
 diet
+
+# Database
+*.db
