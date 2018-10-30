@@ -77,7 +77,7 @@ func init() {
 		return nil
 	})
 	if err != nil {
-		log.Panic(err)
+		log.Fatal(err)
 	}
 }
 
