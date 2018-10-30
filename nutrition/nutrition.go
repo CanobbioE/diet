@@ -10,15 +10,24 @@ import (
 	"github.com/boltdb/bolt"
 )
 
+/*
+The DB has two main buckets: "Food" and "Diet":
+
+"Diet" contains 7 keys:
+	"G1"..."G7"
+The values represents the percentage that has been eaten for the specified group.
+
+"Food" contains sub-buckets named after the food item they represent:
+	"foodname" which has the same structure as "Diet", represents a food item.
+*/
+
 const DB = "../diet.db"
 
 func Main(args map[string]interface{}) error {
 	mealToAdd := args["mealToAdd"].(string)
 	if mealToAdd != "" {
-		// search db for food
-		// retrive values
-		// update diet bucket
-		// show balance
+		// parseMeal
+		addMeal("")
 	}
 
 	newFoodItem := args["newFoodItem"].(string)
@@ -71,7 +80,7 @@ func newFood(item map[string]string) {
 func parseFoodItem(newFoodItem string) (map[string]string, error) {
 	ret := make(map[string]string)
 
-	// check inut format
+	// check input format, should be "name gn:x"
 	ok, err := regexp.MatchString("^\\w+(\\s[Gg]\\d:\\d+)+", newFoodItem)
 	if err != nil {
 		log.Panic(err)
@@ -82,7 +91,7 @@ func parseFoodItem(newFoodItem string) (map[string]string, error) {
 
 	// parse food name
 	tmp := strings.Split(newFoodItem, " ")
-	ret["name"] = tmp[0]
+	ret["name"] = strings.ToLower(tmp[0])
 
 	// parse groups percentages
 	for i := 1; i < len(tmp); i++ {
@@ -93,4 +102,32 @@ func parseFoodItem(newFoodItem string) (map[string]string, error) {
 		ret[strings.ToUpper(aux[0])] = aux[1]
 	}
 	return ret, nil
+}
+
+func addMeal(meal string) error {
+	// open db
+	db, err := bolt.Open(DB, 0666, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	// search db for foodItem
+	err = db.View(func(tx *bolt.Tx) error {
+		foodBucket := tx.Bucket([]byte("Food"))
+		itemBucket := foodBucket.Bucket([]byte(meal))
+		if itemBucket != nil {
+			// retrive values
+			itemBucket.ForEach(func(k, v []byte) error {
+				// foreach do:
+				// update diet bucket
+				return nil
+			})
+		} else {
+			return fmt.Errorf("")
+		}
+		return nil
+		// show balance
+	})
+	return nil
 }
